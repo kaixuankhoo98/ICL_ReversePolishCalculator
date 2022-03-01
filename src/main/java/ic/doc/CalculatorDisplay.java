@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.BoxLayout;
 import javax.swing.WindowConstants;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +32,7 @@ public class CalculatorDisplay implements DisplayInterface {
         // Creating each number button
         for (int i = 1; i <= 9; i++) {
             JButton numberButton = new JButton(Integer.toString(i));
+            setDarkMode(numberButton);
             numberButton.addActionListener(new NumberButtonController(i));
             buttonArrayList.add(numberButton);
         }
@@ -39,12 +42,17 @@ public class CalculatorDisplay implements DisplayInterface {
             model.clearStack();
             answer.setText("");
         });
+        setDarkMode(clear);
 
         // Operand action listeners
         plus.addActionListener(new OperandButtonController("+"));
+        setDarkMode(plus);
         minus.addActionListener(new OperandButtonController("-"));
+        setDarkMode(minus);
         times.addActionListener(new OperandButtonController("*"));
+        setDarkMode(times);
         divide.addActionListener(new OperandButtonController("/"));
+        setDarkMode(divide);
 
         /* NOTE: I have a list of buttons (for numbers)
          *  I have chosen to keep it in the code, so that all the formatting
@@ -59,10 +67,13 @@ public class CalculatorDisplay implements DisplayInterface {
         }
         JPanel textPanels = new JPanel();
         textPanels.setLayout(new GridLayout(2, 1));
+        setDarkMode(userInput);
         textPanels.add(userInput);
+        setDarkMode(answer);
         textPanels.add(answer);
         JPanel operandPanels = new JPanel();
         operandPanels.setLayout(new GridLayout(3, 2));
+        operandPanels.setBackground(Color.DARK_GRAY);
         operandPanels.add(plus);
         operandPanels.add(minus);
         operandPanels.add(times);
@@ -79,6 +90,20 @@ public class CalculatorDisplay implements DisplayInterface {
         frame.getContentPane().add(panel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+
+    // Color setters
+    private void setDarkMode(JButton button) {
+        button.setBackground(Color.DARK_GRAY);
+        button.setForeground(Color.LIGHT_GRAY);
+    }
+
+    private void setDarkMode(JTextField textField) {
+        Font font1 = new Font("Bookman Old Style", Font.BOLD, 20);
+        textField.setFont(font1);
+        textField.setBackground(Color.LIGHT_GRAY);
+        textField.setForeground(Color.BLACK);
     }
 
     @Override
