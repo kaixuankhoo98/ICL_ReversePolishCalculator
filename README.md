@@ -14,5 +14,5 @@ This app is made using a Model-View-Controller design pattern. The model section
 for the calculations.
 
 <p align="center">
-![alt text](https://github.com/kaixuankhoo98/ICL_ReversePolishCalculator/blob/master/image.png?raw=true)
+  <img src="https://github.com/kaixuankhoo98/ICL_ReversePolishCalculator/blob/master/image.png?raw=true" alt="Screenshot of Calculator"/>
 </p>
