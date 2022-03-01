@@ -13,4 +13,4 @@ So this Reverse Polish Calculator allows the user to click 3 (and we see 3 in th
 This app is made using a Model-View-Controller design pattern. The model section implements a java.util.Stack
 for the calculations.
 
-![alt text](https://github.com/kaixuankhoo98/ICL_ReversePolishCalculator/image.jpg?raw=true)
+![alt text](https://github.com/kaixuankhoo98/ICL_ReversePolishCalculator/blob/master/image.png?raw=true)
