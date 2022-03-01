@@ -10,7 +10,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class CalculatorModelTest {
-    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
     DisplayInterface display = context.mock(DisplayInterface.class);
 
     CalculatorModel model = new CalculatorModel(display);
@@ -23,6 +24,7 @@ public class CalculatorModelTest {
     @Test
     public void tryingToCallOperandOnStackWithLessThanTwoElementsDoesNothing() {
         context.checking(new Expectations() {{
+            ignoring(display).updateInputField();
             ignoring(display).updateAnswerField();
         }});
         model.addToStack(3);
@@ -33,6 +35,7 @@ public class CalculatorModelTest {
     @Test
     public void callingAdditionOperandReplacesTopTwoElementsInStackWithTheirSum() {
         context.checking(new Expectations() {{
+            ignoring(display).updateInputField();
             ignoring(display).updateAnswerField();
         }});
         model.addToStack(3);
@@ -46,6 +49,7 @@ public class CalculatorModelTest {
     @Test
     public void callingSubtractionOperandReplacesTopTwoElementsInStackWithTheirDifference() {
         context.checking(new Expectations() {{
+            ignoring(display).updateInputField();
             ignoring(display).updateAnswerField();
         }});
         model.addToStack(3);
@@ -55,4 +59,32 @@ public class CalculatorModelTest {
         assertThat(model.topOfStack(), is(-1));
         assertThat(model.sizeOfStack(), is(2));
     }
- }
+
+    @Test
+    public void numbersAndOperandsKeptTrackOfInUserInputString() {
+        context.checking(new Expectations() {{
+            ignoring(display).updateInputField();
+            ignoring(display).updateAnswerField();
+        }});
+        model.addToStack(3);
+        model.addToStack(4);
+        model.addToStack(5);
+        model.calculate("-");
+
+        assertThat(model.getUserInput(), is("3 4 5 - "));
+    }
+
+    @Test
+    public void clearMethodEmptiesTheStackAndEmptiesTheUserInputString() {
+        context.checking(new Expectations() {{
+            ignoring(display).updateInputField();
+            ignoring(display).updateAnswerField();
+        }});
+        model.addToStack(3);
+        model.addToStack(4);
+        model.clearStack();
+
+        assertThat(model.getUserInput(), is(""));
+        assertTrue(model.stackIsEmpty());
+    }
+}

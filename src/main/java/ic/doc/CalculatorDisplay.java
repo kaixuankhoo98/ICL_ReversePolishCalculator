@@ -1,37 +1,41 @@
 package ic.doc;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.BoxLayout;
+import javax.swing.WindowConstants;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class CalculatorDisplay implements DisplayInterface {
-    private final ArrayList<JButton> buttonArrayList = new ArrayList<>(); // TODO is this necessary?
+    private final ArrayList<JButton> buttonArrayList = new ArrayList<>();
     private final JTextField userInput = new JTextField(10);
     private final JTextField answer = new JTextField(10);
-    private final Integer numberOfButtons = 9;
     private final JButton clear = new JButton("CE");
     private final JButton plus = new JButton("+");
     private final JButton minus = new JButton("-");
-    private String inputString = "";
+    private final JButton times = new JButton("×");
+    private final JButton divide = new JButton("/");
 
     private final CalculatorModel model = new CalculatorModel(this);
 
     public CalculatorDisplay() {
         JFrame frame = new JFrame("Reverse Polish Calculator");
-        frame.setSize(400, 300);
+        frame.setSize(300, 400);
 
         // Creating each number button
-        for(int i = 1; i <= numberOfButtons; i++){
+        for (int i = 1; i <= 9; i++) {
             JButton numberButton = new JButton(Integer.toString(i));
             numberButton.addActionListener(new NumberButtonController(i));
             buttonArrayList.add(numberButton);
         }
 
-        // CE button clears inputString
+        // CE button
         clear.addActionListener(e -> {
-            inputString = "";
-            userInput.setText(inputString);
             model.clearStack();
             answer.setText("");
         });
@@ -39,17 +43,37 @@ public class CalculatorDisplay implements DisplayInterface {
         // Operand action listeners
         plus.addActionListener(new OperandButtonController("+"));
         minus.addActionListener(new OperandButtonController("-"));
+        times.addActionListener(new OperandButtonController("*"));
+        divide.addActionListener(new OperandButtonController("/"));
 
-        // Formatting the panel
-        JPanel panel = new JPanel();
-        for (JButton jButton : buttonArrayList) {
-            panel.add(jButton);
+        /* NOTE: I have a list of buttons (for numbers)
+         *  I have chosen to keep it in the code, so that all the formatting
+         *  is done in this section (rather than adding the buttons in the
+         *  for loop above). I think this makes the code neater. */
+
+        // Formatting the panels
+        JPanel numberPanel = new JPanel();
+        numberPanel.setLayout(new GridLayout(3, 3));
+        for (JButton button : buttonArrayList) {
+            numberPanel.add(button);
         }
-        panel.add(clear);
-        panel.add(plus);
-        panel.add(minus);
-        panel.add(userInput);
-        panel.add(answer);
+        JPanel textPanels = new JPanel();
+        textPanels.setLayout(new GridLayout(2, 1));
+        textPanels.add(userInput);
+        textPanels.add(answer);
+        JPanel operandPanels = new JPanel();
+        operandPanels.setLayout(new GridLayout(3, 2));
+        operandPanels.add(plus);
+        operandPanels.add(minus);
+        operandPanels.add(times);
+        operandPanels.add(divide);
+        operandPanels.add(clear);
+        // Main panel
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(textPanels);
+        panel.add(operandPanels);
+        panel.add(numberPanel);
 
         // Setting panel to frame
         frame.getContentPane().add(panel);
@@ -57,10 +81,17 @@ public class CalculatorDisplay implements DisplayInterface {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    @Override
     public void updateAnswerField() {
         answer.setText(String.valueOf(model.topOfStack()));
     }
 
+    @Override
+    public void updateInputField() {
+        userInput.setText(model.getUserInput());
+    }
+
+    // Action listener classes
     private class NumberButtonController implements ActionListener {
         private final int num;
 
@@ -70,10 +101,7 @@ public class CalculatorDisplay implements DisplayInterface {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            inputString = inputString + num + " "; // add the number to the string
-            userInput.setText(inputString);
             model.addToStack(num);
-            // add to stack in model
         }
     }
 
