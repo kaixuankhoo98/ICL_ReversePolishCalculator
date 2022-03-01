@@ -1,4 +1,4 @@
-# ICL_ReversePolishCalculator
+# Reverse Polish Calculator (ICL Coursework)
 
 Created a GUI where users can press buttons to input numbers for a Reverse Polish Calculator 
 
